@@ -173,6 +173,78 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuwei8626.github.io/2019/11/14/list.remove删除方法的坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="HuangSw">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hsw'blogs">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/14/list.remove删除方法的坑/" class="post-title-link" itemprop="url">list.remove 删除方法的坑</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-14 14:41:04" itemprop="dateCreated datePublished" datetime="2019-11-14T14:41:04+08:00">2019-11-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-18 20:02:23" itemprop="dateModified" datetime="2019-11-18T20:02:23+08:00">2019-11-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="list-remove-删除方法的坑"><a href="#list-remove-删除方法的坑" class="headerlink" title="list.remove 删除方法的坑"></a>list.remove 删除方法的坑</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; stringList = <span class="keyword">new</span> ArrayList&lt;&gt;();<span class="comment">//数据集合</span></span><br><span class="line">        List&lt;Integer&gt; integerList = <span class="keyword">new</span> ArrayList&lt;&gt;();<span class="comment">//存储remove的位置</span></span><br><span class="line"></span><br><span class="line">        stringList.add(<span class="string">"a"</span>);</span><br><span class="line">        stringList.add(<span class="string">"b"</span>);</span><br><span class="line">        stringList.add(<span class="string">"c"</span>);</span><br><span class="line">        stringList.add(<span class="string">"d"</span>);</span><br><span class="line">        stringList.add(<span class="string">"e"</span>);</span><br><span class="line"></span><br><span class="line">        integerList.add(<span class="number">2</span>);</span><br><span class="line">        integerList.add(<span class="number">4</span>);<span class="comment">//此处相当于要移除最后一个数据</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Integer i :integerList)&#123;</span><br><span class="line">            stringList.remove(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (String s :stringList)&#123;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>仔细分析我们发现，remove()这个方法是一个重载方法，即remove(int position)和remove(object object)，唯一的区别是参数类型。 </li>
+<li>仔细观察上面代码你会发现，其实i是Integer对象，而由于Java系统中如果找不到准确的对象，会自动向上升级，而(int &lt; Integer &lt; Object)，所以在调用stringList.remove(i)时，其实使用的remove(object object)，而很明显stringList不存在Integer对象，自然会移除失败（0.0），Java也不会因此报错。<br>如果我们想使用remove(int position)方法，只能降低对象等级，即修改代码；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Integer i :integerList)&#123;</span><br><span class="line">            <span class="keyword">int</span> a =i;</span><br><span class="line">            stringList.remove(a);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://shuwei8626.github.io/2019/10/25/覆盖文章网址/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -347,7 +419,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
