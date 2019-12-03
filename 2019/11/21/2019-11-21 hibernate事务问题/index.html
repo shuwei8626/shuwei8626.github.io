@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="hsw'blogs" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Hibernate事务今天测试Hibernate的事务，发生错误。实际代码如下：12345678910111213141516171819Session session = HibernateUtil.currentSession();Transaction transaction = session.beginTransaction();transaction.begin();try &amp;#123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate事务">
+<meta property="og:url" content="https://shuwei8626.github.io/2019/11/21/2019-11-21 hibernate事务问题/index.html">
+<meta property="og:site_name" content="hsw&#39;blogs">
+<meta property="og:description" content="Hibernate事务今天测试Hibernate的事务，发生错误。实际代码如下：12345678910111213141516171819Session session = HibernateUtil.currentSession();Transaction transaction = session.beginTransaction();transaction.begin();try &amp;#123">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://images0.cnblogs.com/i/460919/201407/041336142151064.gif">
+<meta property="og:updated_time" content="2019-11-21T06:21:10.205Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate事务">
+<meta name="twitter:description" content="Hibernate事务今天测试Hibernate的事务，发生错误。实际代码如下：12345678910111213141516171819Session session = HibernateUtil.currentSession();Transaction transaction = session.beginTransaction();transaction.begin();try &amp;#123">
+<meta name="twitter:image" content="https://images0.cnblogs.com/i/460919/201407/041336142151064.gif">
+
+<link rel="canonical" href="https://shuwei8626.github.io/2019/11/21/2019-11-21 hibernate事务问题/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Hibernate事务 | hsw'blogs</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">hsw'blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">随篇</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuwei8626.github.io/2019/11/21/2019-11-21 hibernate事务问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="HuangSw">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hsw'blogs">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hibernate事务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-21 11:37:50 / 修改时间：14:21:10" itemprop="dateCreated datePublished" datetime="2019-11-21T11:37:50+08:00">2019-11-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Hibernate事务"><a href="#Hibernate事务" class="headerlink" title="Hibernate事务"></a>Hibernate事务</h2><h3 id="今天测试Hibernate的事务，发生错误。实际代码如下："><a href="#今天测试Hibernate的事务，发生错误。实际代码如下：" class="headerlink" title="今天测试Hibernate的事务，发生错误。实际代码如下："></a>今天测试Hibernate的事务，发生错误。实际代码如下：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Session session = HibernateUtil.currentSession();</span><br><span class="line">Transaction transaction = session.beginTransaction();</span><br><span class="line">transaction.begin();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    smbDao.delIssueById(session, issueId);</span><br><span class="line">    <span class="comment">//删除权限中，查询条件配置中 的报表</span></span><br><span class="line">    smbDao.delResAttrDataByIssueId(session ,issueId);</span><br><span class="line">    smbDao.delQueryDeployByIssueId(session ,issueId);</span><br><span class="line">    msg.setSuccess(<span class="keyword">true</span>);</span><br><span class="line">    msg.setMsg(<span class="string">"取消发布成功！"</span>);</span><br><span class="line">    transaction.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    msg.setSuccess(<span class="keyword">false</span>);</span><br><span class="line">    msg.setMsg(<span class="string">"取消发布失败！"</span>);</span><br><span class="line">    transaction.rollback();</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    session.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>就特定的将连接关闭以后，发生错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">11-21 11:06:39 ERROR toggleAutoCommit(org.hibernate.transaction.JDBCTransaction:198) - Could not toggle autocommit</span><br><span class="line">java.sql.SQLException: Connection oracle.jdbc.driver.T4CConnection@4994109c is closed.</span><br><span class="line">	at org.apache.commons.dbcp.DelegatingConnection.checkOpen(DelegatingConnection.java:398)</span><br><span class="line">	at org.apache.commons.dbcp.DelegatingConnection.setAutoCommit(DelegatingConnection.java:371)</span><br><span class="line">	at org.apache.commons.dbcp.PoolingDriver$PoolGuardConnectionWrapper.setAutoCommit(PoolingDriver.java:387)</span><br><span class="line">	at org.hibernate.transaction.JDBCTransaction.toggleAutoCommit(JDBCTransaction.java:194)</span><br><span class="line">	at org.hibernate.transaction.JDBCTransaction.rollbackAndResetAutoCommit(JDBCTransaction.java:186)</span><br><span class="line">	at org.hibernate.transaction.JDBCTransaction.rollback(JDBCTransaction.java:162)</span><br><span class="line">	at cn.sunline.item.service.impl.SmartBIReportingServiceImpl.cancelIssueByIds(SmartBIReportingServiceImpl.java:549)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)</span><br><span class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Method.java:498)</span><br><span class="line">	at cn.sunline.framework.rmi.ClientService.execute(ClientService.java:78)</span><br><span class="line">	at cn.sunline.framework.rmi.RMIService.rmiService(RMIService.java:67)</span><br><span class="line">	at cn.sunline.framework.rmi.RMIServlet.doPost(RMIServlet.java:24)</span><br><span class="line">	at javax.servlet.http.HttpServlet.service(HttpServlet.java:650)</span><br><span class="line">	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)</span><br><span class="line">	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)</span><br><span class="line">	at cn.sunline.permission.common.ActiveFilter.doFilter(ActiveFilter.java:85)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)</span><br><span class="line">	at cn.sunline.framework.rmi.RMIServletCORSFilter.doFilter(RMIServletCORSFilter.java:91)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)</span><br><span class="line">	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)</span><br><span class="line">	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:219)</span><br><span class="line">	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:110)</span><br><span class="line">	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)</span><br><span class="line">	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)</span><br><span class="line">	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:104)</span><br><span class="line">	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:1025)</span><br><span class="line">	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)</span><br><span class="line">	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:445)</span><br><span class="line">	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1137)</span><br><span class="line">	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:637)</span><br><span class="line">	at org.apache.tomcat.util.net.AprEndpoint$SocketProcessor.doRun(AprEndpoint.java:2555)</span><br><span class="line">	at org.apache.tomcat.util.net.AprEndpoint$SocketProcessor.run(AprEndpoint.java:2544)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)</span><br><span class="line">	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br><span class="line">11-21 11:06:39 ERROR rollback(org.hibernate.transaction.JDBCTransaction:168) - JDBC rollback failed</span><br><span class="line">java.sql.SQLException: Connection oracle.jdbc.driver.T4CConnection@4994109c is closed.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>就算重启项目后还是会不断的报错。只能<font color="red">重启oracle数据才能将这个问题解决</font>。如果没有关闭，后续每次结束项目时控制台会打印如下的警告信息。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">十一月 21, 2019 11:08:44 上午 org.apache.catalina.loader.WebappClassLoaderBase clearReferencesJdbc</span><br><span class="line">严重: The web application [/SunITEM] registered the JDBC driver [oracle.jdbc.OracleDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.</span><br><span class="line">十一月 21, 2019 11:08:44 上午 org.apache.catalina.loader.WebappClassLoaderBase clearReferencesJdbc</span><br><span class="line">严重: The web application [/SunITEM] registered the JDBC driver [org.apache.commons.dbcp.PoolingDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.</span><br><span class="line">十一月 21, 2019 11:08:44 上午 org.apache.catalina.loader.WebappClassLoaderBase checkThreadLocalMapForLeaks</span><br><span class="line">严重: The web application [/SunITEM] created a ThreadLocal with key of type [java.lang.ThreadLocal] (value [java.lang</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
+<li><p>单独的Hibernate程序操作数据库的流程：</p>
+<p>1、获取Session</p>
+<p>2、打开事务</p>
+<p>3、操作数据库</p>
+<p>4、提交（回滚）事务</p>
+<p>5、关闭Session</p>
+<p>这样就完成了操作数据库</p>
+</li>
+</ul>
+<p>注一：Hibernate在操作数据库前需要得到Session的实例，这类似于JDBC中的connection</p>
+<p>获取session的方法如下：</p>
+<p>Session session = sessionFactory.openSession();</p>
+<p>通过Session对象可以对数据库进行增删改查的操作，对应的方法分别为：</p>
+<p>save(),delete(),update(),savaOrUpdate(),load(),get()，在Hibernate3中取消了find()方法，必须通过Query或Criteria来进行查询。</p>
+<p>注二：openSession()和getCurrentSession()方法的区别之一</p>
+<p>openSession()需要自己关闭session</p>
+<p>getCurrentSession()不需要自己关闭session，提交（回滚）事务的时候自动关闭session</p>
+<p><font color="red">查到主要的原因：</font> 使用getCurrentSession方法 会自动提交（回滚）事务的时候自动关闭session！！！</p>
+<h3 id="Hibernate中Java对象的状态"><a href="#Hibernate中Java对象的状态" class="headerlink" title="Hibernate中Java对象的状态"></a>Hibernate中Java对象的状态</h3><p>使用缓存的一个明显的好处就是可以减少数据库访问的频率，提高应用程序的性能，因为从内存中读取数据显然要比从数据库中查询快的多。</p>
+<p>鉴于此Hibernate中设计出了Java对象的三种状态。</p>
+<p><img src="https://images0.cnblogs.com/i/460919/201407/041336142151064.gif" alt="img"></p>
+<p>1、临时状态（Transient）。处于该状态的对象还没有被纳入Hibernate的缓存管理体系，跟任何Session都不关联，在数据库中没有对应的记录。</p>
+<p>2、持久化对象（Persistent）。处于这个状态的对象位于Session的缓存中，并且和数据库中的一条数据记录想对应。</p>
+<p>3、游离状态（Detached）。处于这个状态的对象不再位于Session的缓存中，它与临时对象的最大区别在于，游离对象在数据库中还可能存在一条与它对应的记录。</p>
+<p>　　上述3个状态是可以相互转化的，而且我们所说的状态都是针对某一个Session的实例而言的，比方说，对象A对于session1而言是处于持久化状态的，因为它处于session1的缓存中，但是对于session2而言对象A并不在它的缓存中，因此它是处于游离状态的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/21/2019-11-20 daoService的updateAll方法的坑/" rel="next" title="Hibernate.UpdateAll的问题">
+                  <i class="fa fa-chevron-left"></i> Hibernate.UpdateAll的问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/02/ReentrantLock/" rel="prev" title="ReentrantLock 实现原理">
+                  ReentrantLock 实现原理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate事务"><span class="nav-number">1.</span> <span class="nav-text">Hibernate事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#今天测试Hibernate的事务，发生错误。实际代码如下："><span class="nav-number">1.1.</span> <span class="nav-text">今天测试Hibernate的事务，发生错误。实际代码如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hibernate中Java对象的状态"><span class="nav-number">1.3.</span> <span class="nav-text">Hibernate中Java对象的状态</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="HuangSw"
+    src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">HuangSw</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuangSw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -51,14 +51,19 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="hsw&#39;blogs">
+  <meta name="description" content="记一次最近项目中使用过ehcache缓存 EhCache 是一个纯Java的进程内缓存框架，具有快速、精干等特点。它是Hibernate中的默认缓存框架。 ehcache官网最新的版本为3.1。由于项目中的hibernate中已经拥有1.x的依赖，所以这里使用的版本为1.x，与hibernate使用的版本相同。  添加依赖123456789101112&amp;lt;!-- 添加ehcache依赖 --&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ehcache缓存">
 <meta property="og:url" content="https://shuwei8626.github.io/2019/11/19/ehcache缓存的使用/index.html">
 <meta property="og:site_name" content="hsw&#39;blogs">
+<meta property="og:description" content="记一次最近项目中使用过ehcache缓存 EhCache 是一个纯Java的进程内缓存框架，具有快速、精干等特点。它是Hibernate中的默认缓存框架。 ehcache官网最新的版本为3.1。由于项目中的hibernate中已经拥有1.x的依赖，所以这里使用的版本为1.x，与hibernate使用的版本相同。  添加依赖123456789101112&amp;lt;!-- 添加ehcache依赖 --&amp;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-19T12:18:22.209Z">
+<meta property="og:image" content="d:%5CmyBlog%5Cblog%5Csource%5Cimages%5Cimage-20191120113524235.png">
+<meta property="og:updated_time" content="2019-11-20T03:45:56.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hsw&#39;blogs">
+<meta name="twitter:title" content="ehcache缓存">
+<meta name="twitter:description" content="记一次最近项目中使用过ehcache缓存 EhCache 是一个纯Java的进程内缓存框架，具有快速、精干等特点。它是Hibernate中的默认缓存框架。 ehcache官网最新的版本为3.1。由于项目中的hibernate中已经拥有1.x的依赖，所以这里使用的版本为1.x，与hibernate使用的版本相同。  添加依赖123456789101112&amp;lt;!-- 添加ehcache依赖 --&amp;">
+<meta name="twitter:image" content="d:%5CmyBlog%5Cblog%5Csource%5Cimages%5Cimage-20191120113524235.png">
 
 <link rel="canonical" href="https://shuwei8626.github.io/2019/11/19/ehcache缓存的使用/">
 
@@ -74,7 +79,7 @@
   };
 </script>
 
-  <title> | hsw'blogs</title>
+  <title>ehcache缓存 | hsw'blogs</title>
   
 
 
@@ -187,7 +192,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          ehcache缓存
         </h1>
 
         <div class="post-meta">
@@ -199,6 +204,13 @@
 
               <time title="创建时间：2019-11-19 20:18:22" itemprop="dateCreated datePublished" datetime="2019-11-19T20:18:22+08:00">2019-11-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-20 11:45:56" itemprop="dateModified" datetime="2019-11-20T11:45:56+08:00">2019-11-20</time>
+              </span>
 
           
 
@@ -211,7 +223,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h2 id="记一次最近项目中使用过ehcache缓存"><a href="#记一次最近项目中使用过ehcache缓存" class="headerlink" title="记一次最近项目中使用过ehcache缓存"></a>记一次最近项目中使用过ehcache缓存</h2><ul>
+<li>EhCache 是一个纯Java的进程内缓存框架，具有快速、精干等特点。它是Hibernate中的默认缓存框架。</li>
+<li>ehcache官网最新的版本为3.1。由于项目中的hibernate中已经拥有1.x的依赖，所以这里使用的版本为1.x，与hibernate使用的版本相同。</li>
+</ul>
+<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 添加ehcache依赖 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.sf.ehcache<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>ehcache<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.4RC<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- spring集成ehcache的必须依赖 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context-support<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><ul>
+<li>添加ehcache的配置文件</li>
+</ul>
+<p><img src="D:%5CmyBlog%5Cblog%5Csource%5Cimages%5Cimage-20191120113524235.png" alt="image-20191120113524235"></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ehcache</span> <span class="attr">update</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--ehcache缓存 属性介绍</span></span><br><span class="line"><span class="comment">    name：                           Cache的唯一标识</span></span><br><span class="line"><span class="comment">    eternal：                        Element是否永久有效，一但设置了，timeout将不起作用。</span></span><br><span class="line"><span class="comment">    maxElementsInMemory：            内存中最大缓存个数</span></span><br><span class="line"><span class="comment">    maxElementsOnDisk：              磁盘中最大缓存对象数，若是0表示无穷大。</span></span><br><span class="line"><span class="comment">    overflowToDisk：                 Element数量达到maxElementsInMemory时，Ehcache将会Element写到磁盘中。</span></span><br><span class="line"><span class="comment">    timeToIdleSeconds：              Element的失效前的最大闲置时间，默认为0：无限大。仅当element不是永久有效时使用。</span></span><br><span class="line"><span class="comment">    timeToLiveSeconds：              缓存数据的生存时间（TTL），从构建到失效的时间间隔。在元素不是永久驻留时才有效，0表示永久有效。</span></span><br><span class="line"><span class="comment">    diskPersistent：                 是否在VM重启时存储硬盘的缓存数据。默认值是false。</span></span><br><span class="line"><span class="comment">    diskExpiryThreadIntervalSeconds：磁盘失效线程运行时间间隔，默认是120秒。</span></span><br><span class="line"><span class="comment">    diskSpoolBufferSizeMB：          DiskStore（磁盘缓存）的缓存区大小，默认是30MB。每个Cache有应该有</span></span><br><span class="line"><span class="comment">    memoryStoreEvictionPolicy：      清理策略 默认策略是LRU（最近最少使用），其他还有FIFO（先进先出）或是LFU（较少使用）</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 磁盘缓存位置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">diskStore</span> <span class="attr">path</span>=<span class="string">"java.io.tmpdir/ehcache"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 默认缓存 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">defaultCache</span></span></span><br><span class="line"><span class="tag">            <span class="attr">eternal</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">maxElementsInMemory</span>=<span class="string">"10000"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">timeToIdleSeconds</span>=<span class="string">"300"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">timeToLiveSeconds</span>=<span class="string">"1800"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">diskExpiryThreadIntervalSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">memoryStoreEvictionPolicy</span>=<span class="string">"LRU"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">defaultCache</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 缓存指标信息、文件下载、用户对应的菜单权限 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">cache</span> <span class="attr">name</span>=<span class="string">"itemIndex"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">eternal</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">maxElementsInMemory</span>=<span class="string">"10000"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">timeToIdleSeconds</span>=<span class="string">"1800"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">timeToLiveSeconds</span>=<span class="string">"3600"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">diskExpiryThreadIntervalSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">memoryStoreEvictionPolicy</span>=<span class="string">"LRU"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">cache</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 用户的指标数据  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">cache</span> <span class="attr">name</span>=<span class="string">"itemAuthList"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">eternal</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">maxElementsInMemory</span>=<span class="string">"10000"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">timeToIdleSeconds</span>=<span class="string">"21600"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">timeToLiveSeconds</span>=<span class="string">"43200"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">diskExpiryThreadIntervalSeconds</span>=<span class="string">"120"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">memoryStoreEvictionPolicy</span>=<span class="string">"LRU"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">cache</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">ehcache</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="application-xml中添加对spring对ehcache集成"><a href="#application-xml中添加对spring对ehcache集成" class="headerlink" title="application.xml中添加对spring对ehcache集成"></a>application.xml中添加对spring对ehcache集成</h2><ul>
+<li>将ehcache加入， 使用spring管理缓存</li>
+<li>添加ehcache配置文件的位置</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- ehcache start --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cache:annotation-driven</span> <span class="attr">cache-manager</span>=<span class="string">"cacheManager"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"cacheManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.cache.ehcache.EhCacheCacheManager"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cacheManager"</span> <span class="attr">ref</span>=<span class="string">"ehcache"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"ehcache"</span> <span class="attr">class</span>=<span class="string">"org.springframework.cache.ehcache.EhCacheManagerFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"configLocation"</span> <span class="attr">value</span>=<span class="string">"classpath:localEhcache.xml"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- ehcache end --&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="在service中使用ehcache"><a href="#在service中使用ehcache" class="headerlink" title="在service中使用ehcache"></a>在service中使用ehcache</h2><ul>
+<li><p>自动注入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> CacheManager cacheManager;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用ehcacheManager操作缓存</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Map <span class="title">selectItemStructure</span><span class="params">(String indexLevel1Class)</span> </span>&#123;</span><br><span class="line">    Map returnMap = <span class="keyword">new</span> HashMap();</span><br><span class="line">    Cache cache = <span class="keyword">null</span>;</span><br><span class="line">    Map map = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        cache = cacheManager.getCache(<span class="string">"itemIndex"</span>);</span><br><span class="line">        map = cache.get(indexLevel1Class, Map.class);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>) &#123;</span><br><span class="line">        logger.info(<span class="string">"&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;缓存：获取[&#123;&#125;]信息！"</span>, indexLevel1Class);</span><br><span class="line">        returnMap = map;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        logger.info(<span class="string">"&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;数据库：获取[&#123;&#125;]信息！"</span>, indexLevel1Class);</span><br><span class="line">        returnMap = indexAnalysisDao.getItemConstructorByTableName(indexLevel1Class);</span><br><span class="line">        <span class="keyword">if</span> (cache != <span class="keyword">null</span>) &#123;</span><br><span class="line">            cache.put(indexLevel1Class, returnMap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> returnMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
     </div>
 
     
@@ -232,6 +271,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/21/2019-11-20 daoService的updateAll方法的坑/" rel="prev" title="Hibernate.UpdateAll的问题">
+                  Hibernate.UpdateAll的问题 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -270,6 +312,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#记一次最近项目中使用过ehcache缓存"><span class="nav-number">1.</span> <span class="nav-text">记一次最近项目中使用过ehcache缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">3.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#application-xml中添加对spring对ehcache集成"><span class="nav-number">4.</span> <span class="nav-text">application.xml中添加对spring对ehcache集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在service中使用ehcache"><span class="nav-number">5.</span> <span class="nav-text">在service中使用ehcache</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -285,7 +328,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
